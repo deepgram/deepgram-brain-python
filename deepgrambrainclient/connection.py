@@ -122,3 +122,23 @@ class BrainAPI:
   def deleteAsset(self, assetId):
     return self._checkReturn(
       requests.delete("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken)))
+
+  def searchAssets(self, query, assetIds, npp=None, page=None, limit=None):
+    """
+
+    :param query:
+    :param assetIds: list of asset Ids
+    :param npp: number per page or None (default) for all results
+    :param page: page number to start results from or None (default) for 0
+    :param limit: max results or None (default) for no limit
+    :return:
+    """
+    body = {"query":query, 'asset_ids':assetIds}
+    if npp is not None:
+      body['npp'] = npp
+    if page is not None:
+      body['p'] = page
+    if limit is not None:
+      body['limit'] = limit
+    return self._checkReturn(
+      requests.post("{}/assets/search?signed_username={}".format(self.apiURL, self.apiToken), json=body))
