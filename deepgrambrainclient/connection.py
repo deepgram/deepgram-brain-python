@@ -13,7 +13,7 @@ class BrainAPI:
     :param password: optional instead of apiToken, must be passed with username
     :param authenticate: only valid with apiToken. Force a call to the server to authenticate the passed credentials.
     """
-    self.apiURL = kwargs.get('apiURL', 'https://brain.deepgram.com')
+    self.apiURL = kwargs.get('apiURL', 'https://api.deepgram.com')
     if any(i in ['username', 'password', 'apiToken'] for i in kwargs):
       self.login(**kwargs)
 
