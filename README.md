@@ -3,10 +3,11 @@ Python API wrapper for the Deepgram API. Oh yes, it's cool. You should get it.
 Better description to follow but here is a quick usage
 
 # install
-PyPi package to shortly follow but for now just check it out from get:
-get clone https://github.com/deepgram/deepgram-brain-python.git
-cd deepgram-brain-python
-python setup install
+PyPi package to shortly follow but for now just check it out from github:
+
+    get clone https://github.com/deepgram/deepgram-brain-python.git
+    cd deepgram-brain-python
+    python setup install
 
 
 # usage
