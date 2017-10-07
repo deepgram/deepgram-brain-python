@@ -1,13 +1,13 @@
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
 __author__ = 'jmward'
 
-from distutils.core import setup
-
-setup(name='deepgrambrainclient',
-      version='1.0',
+setup(name='brain',
+      version='1.0', # use an version include
       description='Deepgram Brain API client',
       author='Jeff Ward',
+      license='apache2', # check KUR for license file
+      copyright='Copyright (c)2017 Deepgram',
       author_email='jeff.ward@deepgram.com',
       classifiers=[
         'Intended Audience :: Developers',

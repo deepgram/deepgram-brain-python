@@ -1,7 +1,7 @@
 import requests
 import io
 import base64
-
+#license goes here <----
 
 class BrainAPI:
   def __init__(self, **kwargs):
@@ -19,7 +19,8 @@ class BrainAPI:
 
   def _checkReturn(self, response):
     if response.status_code == 200:
-      return response.json()
+      value = response.json()
+      return value
     raise Exception('Call failed: {}'.format(response.status_code))
 
   @property
@@ -57,17 +58,15 @@ class BrainAPI:
 
   @property
   def assets(self):
-    return \
-    self._checkReturn(requests.get("{}/assets?signed_username={}&done=false".format(self.apiURL, self.apiToken)))[
-      'results']
+    returnValue = requests.get("{}/assets?signed_username={}&done=false".format(self.apiURL, self.apiToken))
+    return self._checkReturn(returnValue)['results']
 
   def asset(self, assetId, times=False):
     if times == True:
-      return self._checkReturn(
-        requests.get("{}/assets/{}?times=true&signed_username={}".format(self.apiURL, assetId, self.apiToken)))
-
-    return self._checkReturn(
-      requests.get("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken)))
+      returnValue = requests.get("{}/assets/{}?times=true&signed_username={}".format(self.apiURL, assetId, self.apiToken))
+      return self._checkReturn(returnValue)
+    returnValue = requests.get("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken))
+    return self._checkReturn(returnValue)
 
   def updateAsset(self, assetId, transcript=None, metadata=None):
     body = {}
@@ -79,18 +78,17 @@ class BrainAPI:
       requests.put("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken), json=body))
 
 
-  def createAssetFromURL(self, url, filename=None, async=True):
+  def createAssetFromURL(self, url, async=True, metadata=None):
     """Users the passed URL to load data. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
 
     :param url:
-    :param filename:
+    :param metadata: arbitrary additional description information for the asset
     :param async:
     :return:
     """
     audio = {'uri': url}
     config = {'async': async}
-    metadata = {'filename': filename}
-    if filename is not None:
+    if metadata is not None:
       body = {'audio': audio, 'config': config, 'metadata': metadata}
     else:
       body = {'audio': audio, 'config': config}
@@ -98,20 +96,22 @@ class BrainAPI:
     return self._checkReturn(
       requests.post("{}/speech:recognize?signed_username={}".format(self.apiURL, self.apiToken), json=body))
 
-  def createAsset(self, data, filename=None, async=True):
+  def uploadAsset(self, data, async=True, metadata=None):
     """Takes an array of bytes or a BufferedReader and uploads it. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
     :param data: array of bytes or BufferedReader
-    :param filename:
+    :param metadata: arbitrary additional description information for the asset
     :param async:
     :return:
     """
+    #todo: has atter read would be better here
     if isinstance(data, io.BufferedReader):
       data = data.read()
+    assert isinstance(data, bytes)
     data = base64.b64encode(data)
     audio = {'content': data.decode("utf-8")}
     config = {'async': async}
-    metadata = {'filename': filename}
-    if filename is not None:
+
+    if metadata is not None:
       body = {'audio': audio, 'config': config, 'metadata': metadata}
     else:
       body = {'audio': audio, 'config': config}
