@@ -12,6 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from setuptools import find_packages, setup
+import os
 
 __author__ = 'jmward'
 
@@ -32,7 +33,7 @@ setup(name='brain',
       version=get_version(),
       description='Deepgram Brain API client',
       author='Jeff Ward',
-      license='apache2', # check KUR for license file
+      license='Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)',
       copyright='Copyright (c)2017 Deepgram',
       author_email='jeff.ward@deepgram.com',
       classifiers=[
