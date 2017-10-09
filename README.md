@@ -28,9 +28,13 @@ From pypi
     #just transcribe something
     print(brainAPI.transcribeFromURL('http://some.server.com/someAudioFile.wav'))
 
-    #upload a new asset
+    #upload a new asset from a URL
     result = brainAPI.createAssetFromURL('http://some.server.com/someAudioFile.wav')
     print(brainAPI.asset(result['asset_id'])
+
+    #create it from a local file and give it a filename
+    with open(audioFileLocation, mode='rb') as audioFile:
+      asset = brainAPI.uploadAsset(audioFile, metadata={'filename': filename})
 
 
 
