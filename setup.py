@@ -29,7 +29,7 @@ def get_version():
 
 ################################################################################
 
-setup(name='brain',
+setup(name='deepgram-brain',
       version=get_version(),
       description='Deepgram Brain API client',
       author='Jeff Ward',
