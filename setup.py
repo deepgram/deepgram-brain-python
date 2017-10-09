@@ -37,6 +37,7 @@ setup(name='brain',
       copyright='Copyright (c)2017 Deepgram',
       author_email='jeff.ward@deepgram.com',
       url='https://github.com/deepgram/deepgram-brain-python',
+      download_url = 'https://github.com/deepgram/deepgram-brain-python/archive/0.1.0.tar.gz',
       classifiers=[
         'Intended Audience :: Developers',
         'Topic :: System :: Networking',
