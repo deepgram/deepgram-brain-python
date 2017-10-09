@@ -3,20 +3,23 @@ Python API wrapper for the Deepgram API. Oh yes, it's cool. You should get it.
 Better description to follow but here is a quick usage
 
 # install
-PyPi package to shortly follow but for now just check it out from github:
+From git:
 
     get clone https://github.com/deepgram/deepgram-brain-python.git
     cd deepgram-brain-python
     python setup install
 
+From pypi
+
+    pip install deepgram-brain
 
 # usage
-    import deepgrambrainclient as dbc
+    import brain
 
     ...
 
-    # in the future the api URL will be 'api.deepgram.com' but for the beta it is brain2
-    brainAPI = dbc.BrainAPI(apiURL="brain2.deepgram.com",
+    # in the future the api URL will be 'brain.deepgram.com' but for the beta it is brain2
+    brainAPI = brain.BrainAPI(apiURL="brain2.deepgram.com",
                             username=<username>,
                             password=<password>)
 
