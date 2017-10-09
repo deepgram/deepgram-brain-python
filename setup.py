@@ -20,7 +20,7 @@ __author__ = 'jmward'
 def get_version():
 	""" Gets the current version of the package.
 	"""
-	version_py = os.path.join(os.path.dirname(__file__), 'brain', 'version.py')
+	version_py = os.path.join(os.path.dirname(__file__), 'deepgram', 'version.py')
 	with open(version_py, 'r') as fh:
 		for line in fh:
 			if line.startswith('__version__'):
@@ -37,7 +37,7 @@ setup(name='deepgram-brain',
       copyright='Copyright (c)2017 Deepgram',
       author_email='jeff.ward@deepgram.com',
       url='https://github.com/deepgram/deepgram-brain-python',
-      download_url = 'https://github.com/deepgram/deepgram-brain-python/archive/0.1.0.tar.gz',
+      download_url = 'https://github.com/deepgram/deepgram-brain-python/archive/0.1.1.tar.gz',
       classifiers=[
         'Intended Audience :: Developers',
         'Topic :: System :: Networking',

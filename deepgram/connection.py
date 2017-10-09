@@ -15,18 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-class BrainAPI:
+class Brain:
   def __init__(self, **kwargs):
     """Init and store the user's credentials for future calls. If no credentials are supplied the login function must be called .
 
-    :param apiURL:
-    :param apiToken: use the passed apiToken to authenticate
-    :param username: optional instead of apiToken, must be passed with password
-    :param password: optional instead of apiToken, must be passed with username
+    :param url:
+    :param signed_username: use the passed apiToken to authenticate
+    :param user_id: optional instead of apiToken, must be passed with password
+    :param token: optional instead of apiToken, must be passed with username
     :param authenticate: only valid with apiToken. Force a call to the server to authenticate the passed credentials.
     """
-    self.apiURL = kwargs.get('apiURL', 'https://api.deepgram.com')
-    if any(i in ['username', 'password', 'apiToken'] for i in kwargs):
+    self.url = kwargs.get('url', 'https://brain.deepgram.com')
+    if any(i in ['user_id', 'token', 'signed_username'] for i in kwargs):
       self.login(**kwargs)
 
   def _checkReturn(self, response):
@@ -36,48 +36,48 @@ class BrainAPI:
     raise Exception('Call failed: {}'.format(response.status_code))
 
   @property
-  def apiToken(self):
-    if self._apiToken is None:
-      raise Exception('API Token not set. Either set it or login with a username/password first')
-    return self._apiToken
+  def signedUsername(self):
+    if self._signedUsername is None:
+      raise Exception('Signed username not set. Either set it or login with a user_id/token first')
+    return self._signedUsername
 
-  @apiToken.setter
-  def apiToken(self, apiToken):
-    self._apiToken = apiToken
+  @signedUsername.setter
+  def signedUsername(self, signedUsername):
+    self._signedUsername = signedUsername
 
   def login(self, **kwargs):
     """Logs the current user into the server with the passed in credentials. If successful the apiToken will be changed to match the passed in credentials.
 
     :param apiToken: use the passed apiToken to authenticate
-    :param username: optional instead of apiToken, must be passed with password
-    :param password: optional instead of apiToken, must be passed with username
+    :param user_id: optional instead of apiToken, must be passed with password
+    :param token: optional instead of apiToken, must be passed with username
     :param authenticate: only valid with apiToken. Force a call to the server to authenticate the passed credentials.
     :return:
     """
-    if 'apiToken' in kwargs:
-      apiToken = kwargs['apiToken']
+    if 'signed_username' in kwargs:
+      apiToken = kwargs['signed_username']
       if kwargs.get('authenticate', False):
-        self._checkReturn(requests.get("{}/users?signed_username={}".format(self.apiURL, apiToken)))
-      self.apiToken = apiToken
+        self._checkReturn(requests.get("{}/users?signed_username={}".format(self.url, apiToken)))
+      self.signedUsername = apiToken
     else:
       auth = (kwargs['username'], kwargs['password'])
-      self.apiToken = self._checkReturn(requests.get("{}/users/login".format(self.apiURL), auth=auth))[
+      self.signedUsername = self._checkReturn(requests.get("{}/users/login".format(self.url), auth=auth))[
         'signed_username']
 
   @property
   def user(self):
-    return self._checkReturn(requests.get("{}/users?signed_username={}".format(self.apiURL, self.apiToken)))
+    return self._checkReturn(requests.get("{}/users?signed_username={}".format(self.url, self.signedUsername)))
 
   @property
   def assets(self):
-    returnValue = requests.get("{}/assets?signed_username={}&done=false".format(self.apiURL, self.apiToken))
+    returnValue = requests.get("{}/assets?signed_username={}&done=false".format(self.url, self.signedUsername))
     return self._checkReturn(returnValue)['results']
 
   def asset(self, assetId, times=False):
     if times == True:
-      returnValue = requests.get("{}/assets/{}?times=true&signed_username={}".format(self.apiURL, assetId, self.apiToken))
+      returnValue = requests.get("{}/assets/{}?times=true&signed_username={}".format(self.url, assetId, self.signedUsername))
       return self._checkReturn(returnValue)
-    returnValue = requests.get("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken))
+    returnValue = requests.get("{}/assets/{}?signed_username={}".format(self.url, assetId, self.signedUsername))
     return self._checkReturn(returnValue)
 
   def updateAsset(self, assetId, transcript=None, metadata=None):
@@ -87,10 +87,10 @@ class BrainAPI:
     if metadata is not None:
       body['metadata'] = metadata
     return self._checkReturn(
-      requests.put("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken), json=body))
+      requests.put("{}/assets/{}?signed_username={}".format(self.url, assetId, self.signedUsername), json=body))
 
 
-  def createAssetFromURL(self, url, async=True, metadata=None):
+  def createAssetFromURL(self, url, async=False, metadata=None):
     """Users the passed URL to load data. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
 
     :param url:
@@ -106,9 +106,12 @@ class BrainAPI:
       body = {'audio': audio, 'config': config}
 
     return self._checkReturn(
-      requests.post("{}/speech:recognize?signed_username={}".format(self.apiURL, self.apiToken), json=body))
+      requests.post("{}/speech:recognize?signed_username={}".format(self.url, self.signedUsername), json=body))
 
-  def uploadAsset(self, data, async=True, metadata=None):
+  def transcribeFromURL(self, url):
+    return self.createAssetFromURL(url, async=False)['transcript']
+
+  def uploadAsset(self, data, async=False, metadata=None):
     """Takes an array of bytes or a BufferedReader and uploads it. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
     :param data: array of bytes or BufferedReader
     :param metadata: arbitrary additional description information for the asset
@@ -129,11 +132,14 @@ class BrainAPI:
       body = {'audio': audio, 'config': config}
 
     return self._checkReturn(
-      requests.post("{}/speech:recognize?signed_username={}".format(self.apiURL, self.apiToken), json=body))
+      requests.post("{}/speech:recognize?signed_username={}".format(self.url, self.signedUsername), json=body))
+
+  def transcribe(self, data):
+    return self.uploadAsset(data, async=False)['transcript']
 
   def deleteAsset(self, assetId):
     return self._checkReturn(
-      requests.delete("{}/assets/{}?signed_username={}".format(self.apiURL, assetId, self.apiToken)))
+      requests.delete("{}/assets/{}?signed_username={}".format(self.url, assetId, self.signedUsername)))
 
   def searchAssets(self, query, assetIds, npp=None, page=None, limit=None):
     """
@@ -153,4 +159,4 @@ class BrainAPI:
     if limit is not None:
       body['limit'] = limit
     return self._checkReturn(
-      requests.post("{}/assets/search?signed_username={}".format(self.apiURL, self.apiToken), json=body))
+      requests.post("{}/assets/search?signed_username={}".format(self.url, self.signedUsername), json=body))

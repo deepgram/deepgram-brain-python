@@ -14,22 +14,24 @@ From pypi
     pip install deepgram-brain
 
 # usage
-    import brain
+    from deepgram import Brain
 
     ...
 
-    # in the future the api URL will be 'brain.deepgram.com' but for the beta it is brain2
-    brainAPI = brain.BrainAPI(apiURL="brain2.deepgram.com",
-                            username=<username>,
-                            password=<password>)
+    # Get your user_id and token from deepgram.com/console/documentation
+    brainAPI = Brain(user_id=<user_id>, token=<token>)
 
     # print asset information on all of your assets
     for asset in brainAPI.assets:
       print(brainAPI.asset(asset['asset_id'])
 
+    #just transcribe something
+    print(brainAPI.transcribeFromURL('http://some.server.com/someAudioFile.wav'))
+
     #upload a new asset
-    result = brainAPI.createAssetFromURL('http://some.server.com/someAudioFile.wav', async=False)
+    result = brainAPI.createAssetFromURL('http://some.server.com/someAudioFile.wav')
     print(brainAPI.asset(result['asset_id'])
+
 
 
 ## See the code for more usage and check back often for updates!
