@@ -36,6 +36,7 @@ setup(name='brain',
       license='Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)',
       copyright='Copyright (c)2017 Deepgram',
       author_email='jeff.ward@deepgram.com',
+      url='https://github.com/deepgram/deepgram-brain-python',
       classifiers=[
         'Intended Audience :: Developers',
         'Topic :: System :: Networking',
@@ -44,7 +45,7 @@ setup(name='brain',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
       ],
-      keywords='deepgram transcription audio deep learning',
+      keywords=['deepgram', 'transcription', 'audio', 'deep learning', 'speech', 'awesome'],
       packages=find_packages(),
       install_requires=['requests'])
 
