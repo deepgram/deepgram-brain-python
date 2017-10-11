@@ -1,3 +1,6 @@
+# https://brain.deepgram.com is now live
+During testing/beta we were using https://api.deepgram.com for our rest API. This has now moved to https://brain.deepgram.com. This is the default URL in the python client so if you are using the client for the first time you shouldn't notice a change. For those users that were using the client anc connecting using the url parameter, just remove the url and let the default take over and you should be up and running!
+
 # deepgram-brain-python
 Python API wrapper for the Deepgram API. Oh yes, it's cool. You should get it.
 Better description to follow but here is a quick usage
