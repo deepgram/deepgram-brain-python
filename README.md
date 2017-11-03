@@ -3,7 +3,7 @@ During testing/beta we were using https://api.deepgram.com for our rest API. Thi
 
 # deepgram-brain-python
 Python API wrapper for the Deepgram API. Oh yes, it's cool. You should get it.
-Better description to follow but here is a quick usage
+Here is a quick usage
 
 # install
 From git:
@@ -16,7 +16,7 @@ From pypi
 
     pip install deepgram-brain
 
-# usage
+# usage Python 3.X
     from deepgram import Brain
 
     ...
@@ -39,6 +39,14 @@ From pypi
     with open(audioFileLocation, mode='rb') as audioFile:
       asset = brainAPI.uploadAsset(audioFile, metadata={'filename': filename})
 
+# usage Python 2.X
+We are not planning to support python 2.X so we highly encourage upgrading to 3.X. Having saidd that, the current version should work with 2.X, however when uploading a file you will need to send it as an array of bytes so the example above should now look like:
+
+    ...
+    #create it from a local file and give it a filename
+    with open(audioFileLocation, mode='rb') as audioFile:
+      asset = brainAPI.uploadAsset(audioFile.read(), metadata={'filename': filename})
+    ...
 
 
 ## See the code for more usage and check back often for updates!
