@@ -40,7 +40,7 @@ From pypi
       asset = brainAPI.uploadAsset(audioFile, metadata={'filename': filename})
 
 # usage Python 2.X
-We are not planning to support python 2.X so we highly encourage upgrading to 3.X. Having saidd that, the current version should work with 2.X, however when uploading a file you will need to send it as an array of bytes so the example above should now look like:
+We are not planning to support python 2.X so we highly encourage upgrading to 3.X. Having said that, the current version should work with 2.X, however when uploading a file you will need to send it as an array of bytes so the example above should now look like:
 
     ...
     #create it from a local file and give it a filename
