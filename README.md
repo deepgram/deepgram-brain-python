@@ -49,4 +49,4 @@ We are not planning to support python 2.X so we highly encourage upgrading to 3.
     ...
 
 
-## See the code for more usage and check back often for updates!
+## See the code for more usage and check out https://github.com/deepgram/brain-search-example for a good starting point!
