@@ -90,16 +90,19 @@ class Brain:
       requests.put("{}/assets/{}?signed_username={}".format(self.url, assetId, self.signedUsername), json=body))
 
 
-  def createAssetFromURL(self, url, async=False, metadata=None):
+  def createAssetFromURL(self, url, async=False, metadata=None, callback=None):
     """Users the passed URL to load data. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
 
     :param url:
     :param metadata: arbitrary additional description information for the asset
     :param async:
+    :param callback: Callback URL
     :return:
     """
     audio = {'uri': url}
     config = {'async': async}
+    if callback is not None:
+      config['callback'] = callback
     if metadata is not None:
       body = {'audio': audio, 'config': config, 'metadata': metadata}
     else:
@@ -111,11 +114,12 @@ class Brain:
   def transcribeFromURL(self, url):
     return self.createAssetFromURL(url, async=False)['transcript']
 
-  def uploadAsset(self, data, async=False, metadata=None):
+  def uploadAsset(self, data, async=False, metadata=None, callback=None):
     """Takes an array of bytes or a BufferedReader and uploads it. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
     :param data: array of bytes or BufferedReader
     :param metadata: arbitrary additional description information for the asset
     :param async:
+    :param callback: Callback URL
     :return:
     """
     #todo: has atter read would be better here
@@ -125,6 +129,8 @@ class Brain:
     data = base64.b64encode(data)
     audio = {'content': data.decode("utf-8")}
     config = {'async': async}
+    if callback is not None:
+      config['callback'] = callback
 
     if metadata is not None:
       body = {'audio': audio, 'config': config, 'metadata': metadata}
