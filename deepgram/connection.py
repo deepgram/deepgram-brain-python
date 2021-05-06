@@ -90,17 +90,17 @@ class Brain:
       requests.put("{}/assets/{}?signed_username={}".format(self.url, assetId, self.signedUsername), json=body))
 
 
-  def createAssetFromURL(self, url, async=False, metadata=None, callback=None):
-    """Users the passed URL to load data. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
+  def createAssetFromURL(self, url, isAsync=False, metadata=None, callback=None):
+    """Users the passed URL to load data. If isAsync=false a json with the result is returned otherwise a json with an asset_id is returned.
 
     :param url:
     :param metadata: arbitrary additional description information for the asset
-    :param async:
+    :param isAsync:
     :param callback: Callback URL
     :return:
     """
     audio = {'uri': url}
-    config = {'async': async}
+    config = {'isAsync': isAsync}
     if callback is not None:
       config['callback'] = callback
     if metadata is not None:
@@ -112,13 +112,13 @@ class Brain:
       requests.post("{}/speech:recognize?signed_username={}".format(self.url, self.signedUsername), json=body))
 
   def transcribeFromURL(self, url):
-    return self.createAssetFromURL(url, async=False)['transcript']
+    return self.createAssetFromURL(url, isAsync=False)['transcript']
 
-  def uploadAsset(self, data, async=False, metadata=None, callback=None):
-    """Takes an array of bytes or a BufferedReader and uploads it. If async=false a json with the result is returned otherwise a json with an asset_id is returned.
+  def uploadAsset(self, data, isAsync=False, metadata=None, callback=None):
+    """Takes an array of bytes or a BufferedReader and uploads it. If isAsync=false a json with the result is returned otherwise a json with an asset_id is returned.
     :param data: array of bytes or BufferedReader
     :param metadata: arbitrary additional description information for the asset
-    :param async:
+    :param isAsync:
     :param callback: Callback URL
     :return:
     """
@@ -128,7 +128,7 @@ class Brain:
     assert isinstance(data, bytes)
     data = base64.b64encode(data)
     audio = {'content': data.decode("utf-8")}
-    config = {'async': async}
+    config = {'isAsync': isAsync}
     if callback is not None:
       config['callback'] = callback
 
@@ -141,7 +141,7 @@ class Brain:
       requests.post("{}/speech:recognize?signed_username={}".format(self.url, self.signedUsername), json=body))
 
   def transcribe(self, data):
-    return self.uploadAsset(data, async=False)['transcript']
+    return self.uploadAsset(data, isAsync=False)['transcript']
 
   def deleteAsset(self, assetId):
     return self._checkReturn(
